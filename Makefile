@@ -1,4 +1,3 @@
-
 # using the makefile inside the docs folder
 # clean the current build then
 # test build docs in local environment and 
@@ -15,13 +14,12 @@ github_docs:
 	@make -C ./docsource html
 	@cp -a ./docsource/_build/html/. ./docs
 
+# automatic github action push or pull request
 github_action_docs:
 	rm -rf docs
-	mkdir ./docs && touch ./docs/.nojekyll
-	@cp -a ./README.rst ./docsource/README.rst
-	rm -rf ./docsource/_build && mkdir ./docsource/_build 
-	rm -rf ./docsource/_autosummary
-	cd ./docsource ; ls -a 
-	pipx run poetry run sphinx-build -b html -c ./ ./ ./_build
-	cd ..
-	@cp -a ./docsource/_build/html/. ./docs
+	mkdir docs && touch docs/.nojekyll
+	@cp -a README.rst docsource/README.rst
+	rm -rf docsource/_build && mkdir docsource/_build 
+	rm -rf docsource/_autosummary
+	pipx run poetry run sphinx-build -b html docsource docsource/_build/html
+	@cp -a docsource/_build/html/* docs
